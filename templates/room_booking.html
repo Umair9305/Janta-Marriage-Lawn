@@ -1,24 +1,87 @@
-<h2>Book a Room</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Room Booking</title>
 
-<input type="text" id="name" placeholder="Your Name" required>
-<input type="text" id="phone" placeholder="Phone" required>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-<label>Check-in:</label>
-<input type="date" id="checkin" required>
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 320px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+}
 
-<label>Check-out:</label>
-<input type="date" id="checkout" required>
+h2 {
+    margin-bottom: 15px;
+}
 
-<label>Room Type:</label>
-<select id="room">
-    <option value="Single Room">Single Room</option>
-    <option value="Double Room">Double Room</option>
-    <option value="Deluxe Room">Deluxe Room</option>
-</select>
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
 
-<button onclick="bookRoom()">Book Room</button>
+button {
+    width: 100%;
+    padding: 12px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-<p id="msg"></p>
+button:hover {
+    background: #218838;
+}
+
+#msg {
+    margin-top: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>🏨 Book a Room</h2>
+
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="text" id="phone" placeholder="Phone">
+
+    <label>Check-in:</label>
+    <input type="date" id="checkin">
+
+    <label>Check-out:</label>
+    <input type="date" id="checkout">
+
+    <select id="room">
+        <option value="Single Room">Single Room</option>
+        <option value="Double Room">Double Room</option>
+        <option value="Deluxe Room">Deluxe Room</option>
+    </select>
+
+    <button onclick="bookRoom()">Book Room</button>
+
+    <p id="msg"></p>
+</div>
 
 <script>
 function bookRoom() {
@@ -29,7 +92,6 @@ function bookRoom() {
     let checkout = document.getElementById("checkout").value;
     let room = document.getElementById("room").value;
 
-    // 🔴 Validation
     if (!name || !phone || !checkin || !checkout) {
         document.getElementById("msg").innerText = "All fields are required!";
         return;
@@ -40,18 +102,16 @@ function bookRoom() {
         return;
     }
 
-    let data = {
-        name: name,
-        phone: phone,
-        check_in: checkin,
-        check_out: checkout,
-        room_type: room
-    };
-
     fetch('/room-book', {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+            name: name,
+            phone: phone,
+            check_in: checkin,
+            check_out: checkout,
+            room_type: room
+        })
     })
     .then(res => res.json())
     .then(response => {
@@ -66,3 +126,6 @@ function bookRoom() {
     });
 }
 </script>
+
+</body>
+</html>
