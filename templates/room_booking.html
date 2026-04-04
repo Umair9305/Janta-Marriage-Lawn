@@ -1,0 +1,68 @@
+<h2>Book a Room</h2>
+
+<input type="text" id="name" placeholder="Your Name" required>
+<input type="text" id="phone" placeholder="Phone" required>
+
+<label>Check-in:</label>
+<input type="date" id="checkin" required>
+
+<label>Check-out:</label>
+<input type="date" id="checkout" required>
+
+<label>Room Type:</label>
+<select id="room">
+    <option value="Single Room">Single Room</option>
+    <option value="Double Room">Double Room</option>
+    <option value="Deluxe Room">Deluxe Room</option>
+</select>
+
+<button onclick="bookRoom()">Book Room</button>
+
+<p id="msg"></p>
+
+<script>
+function bookRoom() {
+
+    let name = document.getElementById("name").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let checkin = document.getElementById("checkin").value;
+    let checkout = document.getElementById("checkout").value;
+    let room = document.getElementById("room").value;
+
+    // 🔴 Validation
+    if (!name || !phone || !checkin || !checkout) {
+        document.getElementById("msg").innerText = "All fields are required!";
+        return;
+    }
+
+    if (checkout <= checkin) {
+        document.getElementById("msg").innerText = "Check-out must be after Check-in!";
+        return;
+    }
+
+    let data = {
+        name: name,
+        phone: phone,
+        check_in: checkin,
+        check_out: checkout,
+        room_type: room
+    };
+
+    fetch('/room-book', {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.success) {
+            document.getElementById("msg").innerText = "✅ Room booked successfully!";
+        } else {
+            document.getElementById("msg").innerText = "❌ " + response.message;
+        }
+    })
+    .catch(() => {
+        document.getElementById("msg").innerText = "Server error!";
+    });
+}
+</script>
