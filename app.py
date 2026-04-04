@@ -49,6 +49,10 @@ def catering():
 def lighting():
     return render_template('lighting.html')
 
+@app.route('/room-booking')
+def room_booking():
+    return render_template('room_booking.html')
+
 # Get already booked dates (future dates only)
 @app.route('/get-booked-dates')
 def get_booked_dates():
